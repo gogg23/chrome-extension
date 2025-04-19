@@ -1,0 +1,32 @@
+{
+  "manifest_version": 3,
+  "name": "Degraphe Screen Reader",
+  "description": "It records the users'screen",
+  "icons": {
+    "128": "/images/icon-128x128.png"
+  }
+},
+
+"background scripts":{
+    "service_worker": "background.js"
+},
+
+"action": {
+    "default_popup": "popup.html"
+    "default_icon": {
+        "16": "/images/icon-16x16.png",
+        "48": "/images/icon-32x32.png",
+        "128": "/images/icon-128x128.png"
+    }
+},
+
+"host_permissions": [
+    "http://*/*",
+    "https://*/*",
+],
+
+"permissions": [
+   
+],
+
+
