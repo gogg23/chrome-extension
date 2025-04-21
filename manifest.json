@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Degraphe Screen Reader",
+  "name": "Video Recorder Extension",
   "description": "It records the users'screen",
   "icons": {
     "128": "/images/icon-128x128.png"
