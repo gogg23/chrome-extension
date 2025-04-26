@@ -19,5 +19,5 @@
 }
 
 .button_cont button:hover {
-  box-shadow: 1px 0px 10p #eee;
+  box-shadow: 1px;
 }

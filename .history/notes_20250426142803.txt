@@ -1,0 +1,1 @@
+popup.js <---> tab(content script) <---> background.js script
