@@ -4,6 +4,6 @@ Chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'start_recording') {
     console.log('request recording');
 
-    sendResponse(`processed:${message.action}`);
+    sendResponse('seen');
   }
 });
