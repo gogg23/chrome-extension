@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // GET THE SELECTORS OF THE BUTTONS
-  const startVideoButton = document.querySelector('button#start_video');
-  const stopVideoButton = document.querySelector('button#stop_video');
+  const startVideoButton = document.querySelector('button#start-button');
+  const stopVideoButton = document.querySelector('button#stop-button');
 
-  // adding event listeners
-
+  // Add event listeners
   startVideoButton.addEventListener('click', () => {
     chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
       chrome.tabs.sendMessage(
@@ -14,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!chrome.runtime.lastError) {
             console.log(response);
           } else {
-            console.log(chrome.runtime.lastError, 'error line 14');
+            console.log(chrome.runtime.lastError, 'error line 18');
           }
         }
       );
@@ -30,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (!chrome.runtime.lastError) {
             console.log(response);
           } else {
-            console.log(chrome.runtime.lastError, 'error line 27');
+            console.log(chrome.runtime.lastError, 'error line 31');
           }
         }
       );
