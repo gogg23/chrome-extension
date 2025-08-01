@@ -1,60 +1,62 @@
-let mediaRecorder;
-let recordedChunks = [];
+console.log('Hi, I have been injected whoopie!!!');
+
+var recorder = null;
+function onAccessApproved(stream) {
+  recorder = new MediaRecorder(stream);
+
+  recorder.start();
+
+  recorder.onstop = function () {
+    stream.getTracks().forEach(function (track) {
+      if (track.readyState === 'live') {
+        track.stop();
+      }
+    });
+  };
+
+  recorder.ondataavailable = function (event) {
+    let recordedBlob = event.data;
+    let url = URL.createObjectURL(recordedBlob);
+
+    let a = document.createElement('a');
+
+    a.style.display = 'none';
+    a.href = url;
+    a.download = 'screen-recording.webm';
+
+    document.body.appendChild(a);
+    a.click();
+
+    document.body.removeChild(a);
+
+    URL.revokeObjectURL(url);
+  };
+}
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.action === 'request_recording') {
-    startRecording()
-      .then(() => {
-        sendResponse({ status: 'recording_started' });
+    console.log('requesting recording');
+
+    sendResponse(`processed: ${message.action}`);
+
+    navigator.mediaDevices
+      .getDisplayMedia({
+        audio: true,
+        video: {
+          width: 9999999999,
+          height: 9999999999,
+        },
       })
-      .catch((err) => {
-        console.error('Recording failed:', err);
-        sendResponse({ status: 'error', error: err.message });
+      .then((stream) => {
+        onAccessApproved(stream);
       });
-    return true; // keeps sendResponse alive for async
   }
 
   if (message.action === 'stopvideo') {
-    stopRecording();
-    sendResponse({ status: 'recording_stopped' });
+    console.log('stopping video');
+    sendResponse(`processed: ${message.action}`);
+    if (!recorder) return console.log('no recorder');
+
+    recorder.stop();
   }
 });
-
-async function startRecording() {
-  const stream = await navigator.mediaDevices.getDisplayMedia({
-    video: { mediaSource: 'screen' },
-    audio: true,
-  });
-
-  mediaRecorder = new MediaRecorder(stream);
-  recordedChunks = [];
-
-  mediaRecorder.ondataavailable = function (event) {
-    if (event.data.size > 0) {
-      recordedChunks.push(event.data);
-    }
-  };
-
-  mediaRecorder.onstop = function () {
-    const blob = new Blob(recordedChunks, {
-      type: 'video/webm',
-    });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = url;
-    a.download = 'recorded-video.webm';
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(url);
-  };
-
-  mediaRecorder.start();
-}
-
-function stopRecording() {
-  if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-    mediaRecorder.stop();
-  }
-}
